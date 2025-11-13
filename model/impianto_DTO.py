@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from database.consumo_DAO import ConsumoDAO
+from model.consumo_DTO import Consumo
 
 '''
     DTO (Data Transfer Object) dell'entità Impianto
@@ -14,9 +15,15 @@ class Impianto:
     # RELAZIONI
     lista_consumi: list = None
 
-    def get_consumi(self):
+    def get_consumi(self) :
         """ Aggiorna e Restituisce la lista di consumi (self.lista_consumi) associati all'impianto"""
         # TODO
+        if self.lista_consumi is None:
+            self.lista_consumi = []
+        self.lista_consumi.clear()
+        for c in ConsumoDAO.get_consumi(self.id):
+            self.lista_consumi.append(c)
+        return self.lista_consumi
 
     def __eq__(self, other):
         return isinstance(other, Impianto) and self.id == other.id
